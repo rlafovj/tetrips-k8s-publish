@@ -22,9 +22,9 @@ pipeline {
                 script {
                     sh "chmod +x ./gradlew"
                     def servicesToBuild = [
-                        "service:eureka-service",
-                        "service:gateway-service",
-                        "service:user-service"
+                        "eureka-service",
+                        "gateway-service",
+                        "user-service"
                     ]
                     servicesToBuild.each { servicePath ->
                         sh "./gradlew :${servicePath}:bootJar"
