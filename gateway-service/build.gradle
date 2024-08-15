@@ -28,9 +28,9 @@ ext {
     springCloudVersion = "2023.0.2"
 }
 
-bootJar.enabled = false
+bootJar.enabled = true
 
-jar.enabled = true
+jar.enabled = false
 
 dependencies {
     // security
