@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: USER
+  profiles:
+    active: service
+  config:
+    import: optional:configserver:http://223.130.151.112:8888

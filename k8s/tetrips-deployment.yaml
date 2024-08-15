@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tetrips-deployment
+  labels:
+    app: tetrips
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tetrips
+  template:
+    metadata:
+      labels:
+        app: tetrips
+    spec:
+      containers:
+        - name: tetrips-eureka
+          image: jeonhs6885/tetrips-eureka:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8761
+        - name: tetrips-gateway
+          image: jeonhs6885/tetrips-gateway:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+        - name: tetrips-user
+          image: jeonhs6885/tetrips-user:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8090

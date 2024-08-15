@@ -1,0 +1,78 @@
+pipeline {
+    agent any
+    environment {
+        PUSH_VERSION = "latest"
+        COMPOSE_TAGNAME = 'tetrips'
+        DOCKERHUB_CREDENTIALS = credentials('docker-token')
+        services = "gateway,eureka,user"
+    }
+    stages {
+        stage('Github clone') {
+            steps {
+                git branch: "main", credentialsId: 'github-token', url: "https://github.com/rlafovj/tetrips-k8s-publish.git"
+            }
+        }
+        stage("Docker Login") {
+            steps {
+               sh "echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin"
+            }
+        }
+         stage('Java Build') {
+            steps {
+                script {
+                    sh "chmod +x ./gradlew"
+                    def servicesToBuild = [
+                        "service:eureka-service",
+                        "service:gateway-service",
+                        "service:user-service"
+                    ]
+                    servicesToBuild.each { servicePath ->
+                        sh "./gradlew :${servicePath}:bootJar"
+                    }
+                }
+            }
+        }
+        stage("Docker Image Remove") {
+            steps {
+                script {
+                    services.split(',').each { service ->
+                        sh "docker rmi -f $COMPOSE_TAGNAME/${service}:$PUSH_VERSION"
+                        sh "docker rmi -f $DOCKERHUB_CREDENTIALS_USR/${service}:$PUSH_VERSION"
+                        sh "docker rmi -f $DOCKERHUB_CREDENTIALS_USR/tetrips-${service}:$PUSH_VERSION"
+                    }
+                }
+            }
+        }
+        stage("Docker Image Build") {
+            steps {
+                sh "docker compose build"
+            }
+        }
+//         stage("Docker Image Tag") {
+//             steps {
+//                 script {
+//                     services.split(',').each { service ->
+//                         sh "docker tag $COMPOSE_TAGNAME/${service}:$PUSH_VERSION $DOCKERHUB_CREDENTIALS_USR/$service:$PUSH_VERSION"
+//                     }
+//                 }
+//             }
+//         }
+        stage("Docker Push") {
+            steps {
+                script {
+                    services.split(',').each { service ->
+                        sh "docker push $DOCKERHUB_CREDENTIALS_USR/tetrips-${service}:$PUSH_VERSION"
+                    }
+                }
+            }
+        }
+       stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                       sh 'kubectl apply -f ./k8s/tetrips-deployment.yml'
+                       sh 'kubectl apply -f ./k8s/tetrips-service.yml'
+                }
+            }
+       }
+    }
+}
