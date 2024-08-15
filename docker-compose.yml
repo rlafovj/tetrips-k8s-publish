@@ -1,0 +1,39 @@
+version: '3.2'
+
+services:
+  eureka-service:
+    container_name: tetrips-eureka-service-container
+    image: tetrips-eureka-service:latest
+    build:
+      context: ./eureka-service
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - app-network
+
+  gateway-service:
+    container_name: tetrips-gateway-service-container
+    image: tetrips-gateway-service:latest
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+  user-service:
+    container_name: tetrips-user-service-container
+    image: tetrips-user-service:latest
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

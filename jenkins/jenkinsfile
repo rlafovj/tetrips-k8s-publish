@@ -36,9 +36,7 @@ pipeline {
             steps {
                 script {
                     services.split(',').each { service ->
-                        sh "docker rmi -f $COMPOSE_TAGNAME/${service}:$PUSH_VERSION"
-                        sh "docker rmi -f $DOCKERHUB_CREDENTIALS_USR/${service}:$PUSH_VERSION"
-                        sh "docker rmi -f $DOCKERHUB_CREDENTIALS_USR/tetrips-${service}:$PUSH_VERSION"
+                        sh "docker rmi -f $DOCKERHUB_CREDENTIALS_USR/tetrips-${service}-service:$PUSH_VERSION"
                     }
                 }
             }
@@ -61,7 +59,7 @@ pipeline {
             steps {
                 script {
                     services.split(',').each { service ->
-                        sh "docker push $DOCKERHUB_CREDENTIALS_USR/tetrips-${service}:$PUSH_VERSION"
+                        sh "docker push $DOCKERHUB_CREDENTIALS_USR/tetrips-${service}-service:$PUSH_VERSION"
                     }
                 }
             }
