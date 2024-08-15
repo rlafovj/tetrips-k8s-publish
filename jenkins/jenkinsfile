@@ -2,9 +2,10 @@ pipeline {
     agent any
     environment {
         PUSH_VERSION = "latest"
-        COMPOSE_TAGNAME = 'tetrips'
         DOCKERHUB_CREDENTIALS = credentials('docker-token')
         services = "gateway,eureka,user"
+        PATH = "/usr/local/bin:/usr/bin:${env.PATH}" // kubectl과 ncp-iam-authenticator 경로 추가
+        KUBECONFIG = '/var/lib/jenkins/.kube/config'
     }
     stages {
         stage('Github clone') {
@@ -28,6 +29,10 @@ pipeline {
                     ]
                     servicesToBuild.each { servicePath ->
                         sh "./gradlew :${servicePath}:bootJar"
+                // 디렉토리가 존재하는지 확인
+                        sh "mkdir -p ./docker-build-context/${servicePath}/build/libs"
+                // 빌드 아티팩트를 Docker 빌드 컨텍스트로 복사
+                        sh "cp -r ${servicePath}/build/libs/* ./docker-build-context/${servicePath}/build/libs/"
                     }
                 }
             }
@@ -36,6 +41,8 @@ pipeline {
             steps {
                 script {
                     services.split(',').each { service ->
+                        sh "docker rmi -f $DOCKERHUB_CREDENTIALS_USR/${service}:$PUSH_VERSION"
+                        sh "docker rmi -f $DOCKERHUB_CREDENTIALS_USR/${service}:$PUSH_VERSION"
                         sh "docker rmi -f $DOCKERHUB_CREDENTIALS_USR/tetrips-${service}-service:$PUSH_VERSION"
                     }
                 }
@@ -46,15 +53,24 @@ pipeline {
                 sh "docker compose build"
             }
         }
-//         stage("Docker Image Tag") {
-//             steps {
-//                 script {
-//                     services.split(',').each { service ->
-//                         sh "docker tag $COMPOSE_TAGNAME/${service}:$PUSH_VERSION $DOCKERHUB_CREDENTIALS_USR/$service:$PUSH_VERSION"
-//                     }
-//                 }
-//             }
-//         }
+        stage("Docker Image Tag and Clean") {
+            steps {
+                script {
+                    services.split(',').each { service ->
+                        // 기존 로컬 이미지 이름
+                        def localImage = "tetrips-${service}-service:latest"
+                        // 새로운 이미지 이름
+                        def newImage = "$DOCKERHUB_CREDENTIALS_USR/tetrips-${service}-service:latest"
+
+                        // 로컬 이미지에 새로운 태그 추가
+                        sh "docker tag $localImage $newImage"
+
+                        // 원래의 로컬 이미지 삭제 (옵션)
+                        sh "docker rmi $localImage"
+                    }
+                }
+            }
+        }
         stage("Docker Push") {
             steps {
                 script {
@@ -64,13 +80,17 @@ pipeline {
                 }
             }
         }
-       stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                       sh 'kubectl apply -f ./k8s/tetrips-deployment.yml'
-                       sh 'kubectl apply -f ./k8s/tetrips-service.yml'
-                }
-            }
+       stage('Deploy Kubernetes files') {
+           steps {
+               script {
+                   // Verifying connection to the cluster
+                   sh 'kubectl get nodes'
+
+                   // Apply Kubernetes configurations
+                   sh 'kubectl apply -f ./k8s/tetrips-deployment.yaml'
+                   sh 'kubectl apply -f ./k8s/tetrips-service.yaml'
+               }
+           }
        }
-    }
+   }
 }
