@@ -31,4 +31,4 @@ spec:
           ports:
             - containerPort: 8090
       nodeSelector:
-        kubernetes.io/hostname: tetrips-msa-np-w-5gdm
+        kubernetes.io/hostname: tetrips-msa-np-w-5i0a
