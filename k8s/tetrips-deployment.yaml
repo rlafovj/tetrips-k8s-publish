@@ -16,17 +16,17 @@ spec:
     spec:
       containers:
         - name: tetrips-eureka
-          image: jeonhs6885/tetrips-eureka:latest
+          image: jeonhs6885/tetrips-eureka-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8761
         - name: tetrips-gateway
-          image: jeonhs6885/tetrips-gateway:latest
+          image: jeonhs6885/tetrips-gateway-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
         - name: tetrips-user
-          image: jeonhs6885/tetrips-user:latest
+          image: jeonhs6885/tetrips-user-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8090
