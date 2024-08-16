@@ -5,7 +5,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker-token')
         services = "gateway,eureka,user"
         PATH = "/usr/local/bin:/usr/bin:${env.PATH}" // kubectl과 ncp-iam-authenticator 경로 추가
-        KUBECONFIG = '/var/lib/jenkins/.kube/config'
+        KUBECONFIG = '/var/lib/jenkins/kubeconfig.yaml' //사용자가 만든 kubeconfig 파일을 /var/lib/jenkins에 복사하고 jenkins에 권한 부여함
     }
     stages {
         stage('Github clone') {
