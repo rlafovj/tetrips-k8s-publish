@@ -89,6 +89,7 @@ pipeline {
                    // Apply Kubernetes configurations
                    sh 'kubectl apply -f ./k8s/tetrips-deployment.yaml'
                    sh 'kubectl apply -f ./k8s/tetrips-service.yaml'
+                   sh 'kubectl rollout restart deployment tetrips-deployment'
                }
            }
        }
