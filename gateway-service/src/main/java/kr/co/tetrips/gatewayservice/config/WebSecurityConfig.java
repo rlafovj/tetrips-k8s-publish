@@ -58,8 +58,7 @@ public class WebSecurityConfig {
   @Bean
   public CorsConfigurationSource configureCors() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(List.of("http://www.tetrips.co.kr", "https://www.tetrips.co.kr"));
-    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    config.setAllowedOriginPatterns(List.of("http://www.tetrips.co.kr", "https://www.tetrips.co.kr"));    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
     config.setAllowCredentials(true);
 
