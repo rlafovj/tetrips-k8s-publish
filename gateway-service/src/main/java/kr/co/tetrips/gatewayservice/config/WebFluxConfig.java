@@ -12,7 +12,7 @@ public class WebFluxConfig implements WebFluxConfigurer{
   @Override
   public void addCorsMappings(@NonNull CorsRegistry registry) {
     registry.addMapping("/**")
-            .allowedOriginPatterns("*")
+            .allowedOriginPatterns("http://www.tetrips.co.kr", "https://www.tetrips.co.kr")
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowedHeaders("Authorization", "Content-Type", "X-Requested-With")
             .allowCredentials(true)
