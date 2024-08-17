@@ -14,7 +14,6 @@ import java.net.URLDecoder;
 
 @Slf4j
 @RestController
-@CrossOrigin(value = "*", allowedHeaders = "*")
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
