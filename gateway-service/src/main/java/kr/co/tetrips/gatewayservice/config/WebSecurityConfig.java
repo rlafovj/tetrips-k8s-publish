@@ -35,13 +35,13 @@ public class WebSecurityConfig {
   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
     return http
             .authorizeExchange(authorize -> authorize
-                            .pathMatchers(
-                                    ("/login/oauth2/code/**"),
-                                    ("/user/login/**"),
-                                    ("/user/signup/**"),
-                                    ("/error")
-                            ).permitAll()
-                            .anyExchange().permitAll()//.authenticated()
+                    .pathMatchers(
+                            ("/login/oauth2/code/**"),
+                            ("/user/login/**"),
+                            ("/user/signup/**"),
+                            ("/error")
+                    ).permitAll()
+                    .anyExchange().permitAll()//.authenticated()
             )
             .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
             .httpBasic(i -> i.disable())
@@ -55,18 +55,16 @@ public class WebSecurityConfig {
 
             .build();
   }
+  @Bean
+  public CorsConfigurationSource configureCors() {
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowedOrigins(List.of("http://www.tetrips.co.kr", "https://www.tetrips.co.kr"));
+    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+    config.setAllowCredentials(true);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+    return source;
+  }
 }
-
-@Bean
-public CorsConfigurationSource configureCors() {
-  CorsConfiguration config = new CorsConfiguration();
-  config.setAllowedOrigins(List.of("http://www.tetrips.co.kr", "https://www.tetrips.co.kr"));
-  config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-  config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
-  config.setAllowCredentials(true);
-
-  UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-  source.registerCorsConfiguration("/**", config);
-  return source;
-}
-
