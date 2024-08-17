@@ -5,22 +5,19 @@ metadata:
   labels:
     app: tetrips-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - name: gateway
       protocol: TCP
-      port: 8000
+      port: 80
       targetPort: 8000
-      nodePort: 30080
     - name: eureka
       protocol: TCP
       port: 8761
       targetPort: 8761
-      nodePort: 30861
     - name: user
       protocol: TCP
       port: 8090
       targetPort: 8090
-      nodePort: 30090
   selector:
     app: tetrips
