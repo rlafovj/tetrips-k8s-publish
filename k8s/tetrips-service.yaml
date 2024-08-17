@@ -5,7 +5,7 @@ metadata:
   labels:
     app: tetrips-service
 spec:
-  type: LoadBalancer
+  type: NordPort
   ports:
     - name: gateway
       protocol: TCP
