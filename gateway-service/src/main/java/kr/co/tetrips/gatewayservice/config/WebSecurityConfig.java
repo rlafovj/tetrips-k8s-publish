@@ -12,6 +12,11 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -41,7 +46,7 @@ public class WebSecurityConfig {
             .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
             .httpBasic(i -> i.disable())
             .csrf(i -> i.disable())
-            .cors(i -> i.disable())
+            .cors(cors -> cors.configurationSource(configureCors()))
             .formLogin(i -> i.disable())
             .oauth2Login(oauth -> oauth
                     .authorizationRequestResolver(serverOAuth2AuthorizationRequestResolver())
@@ -51,3 +56,17 @@ public class WebSecurityConfig {
             .build();
   }
 }
+
+@Bean
+public CorsConfigurationSource configureCors() {
+  CorsConfiguration config = new CorsConfiguration();
+  config.setAllowedOrigins(List.of("http://www.tetrips.co.kr", "https://www.tetrips.co.kr"));
+  config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+  config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+  config.setAllowCredentials(true);
+
+  UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+  source.registerCorsConfiguration("/**", config);
+  return source;
+}
+
