@@ -43,7 +43,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     return ((exchange, chain) -> {
       log.info("Request URL: {}", exchange.getRequest().getURI());
       if (exchange.getRequest().getMethod() == HttpMethod.OPTIONS) {
-        exchange.getResponse().getHeaders().add("Access-Control-Allow-Origin", "*");
+        exchange.getResponse().getHeaders().add("Access-Control-Allow-Origin", "http://www.tetrips.co.kr");
         exchange.getResponse().getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         exchange.getResponse().getHeaders().add("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Authorization");
         exchange.getResponse().getHeaders().add("Access-Control-Expose-Headers", "Content-Length,Content-Range");
