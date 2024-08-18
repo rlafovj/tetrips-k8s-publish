@@ -2,6 +2,7 @@ package kr.co.tetrips.gatewayservice.filter;
 
 import java.util.List;
 
+import io.netty.handler.codec.http.cookie.Cookie;
 import kr.co.tetrips.gatewayservice.domain.vo.Role;
 import kr.co.tetrips.gatewayservice.service.provider.JwtProvider;
 import lombok.Setter;
@@ -53,7 +54,10 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
       if(!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION))
         return onError(exchange, HttpStatus.UNAUTHORIZED, "No Authorization Header");
 
-
+//      Cookie[] cookies = exchange.getRequest().getCookies().values().toArray(new Cookie[0]);
+//      String accessToken = null;
+//      if("accessToken".equals(cookies[0].name()))
+//        accessToken = cookies[0].value(); // 쿠키를 까서 엑세스토큰을 추출하는 과정
       @SuppressWarnings("null")
       String token = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
 

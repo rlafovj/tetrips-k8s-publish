@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService{
                                                 .path("/")
                                                 .secure(true) // for test
                                                 .sameSite("None") // for test
-                                                .httpOnly(true)
+//                                                .httpOnly(true)
                                                 .build()
                                     )
                                     .cookie(
@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService{
                                                 .path("/")
                                                 .secure(true) // for test
                                                 .sameSite("None") // for test
-                                                .httpOnly(true)
+//                                                .httpOnly(true)
                                                 .build()
                                     )
                                     .cookie(
@@ -74,7 +74,7 @@ public class AuthServiceImpl implements AuthService{
                                                 .path("/")
                                                 .secure(true) // for test
                                                 .sameSite("None") // for test
-                                                .httpOnly(true)
+//                                                .httpOnly(true)
                                                 .build()
                                     )
 //                                        .cookie(
@@ -120,7 +120,7 @@ public class AuthServiceImpl implements AuthService{
                             .path("/")
                             .secure(true) // for test
                             .sameSite("None") // for test
-                            .httpOnly(true)
+//                            .httpOnly(true)
                             .build()
                 )
                 .build()
