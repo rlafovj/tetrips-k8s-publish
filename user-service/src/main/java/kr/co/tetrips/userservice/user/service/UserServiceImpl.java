@@ -3,6 +3,7 @@ package kr.co.tetrips.userservice.user.service;
 import jakarta.transaction.Transactional;
 import kr.co.tetrips.userservice.user.RoleRepository;
 import kr.co.tetrips.userservice.user.domain.dto.LoginResultDTO;
+import kr.co.tetrips.userservice.user.domain.dto.PasswordDTO;
 import kr.co.tetrips.userservice.user.domain.model.RoleModel;
 import kr.co.tetrips.userservice.user.domain.model.UserModel;
 import kr.co.tetrips.userservice.user.domain.dto.UserDTO;
@@ -209,5 +210,26 @@ public class UserServiceImpl implements UserService {
                     .status(200)
                     .build();
         }
+    }
+
+    @Override
+    public MessengerDTO updatePassword(PasswordDTO dto) {
+        UserModel userModel = userRepository.findUserByEmail(dto.getEmail()).orElseGet(() -> UserModel.builder().build());
+        boolean flag = passwordEncoder.matches(dto.getLastPassword(), userModel.getPassword());
+        return flag ?
+                userRepository.updatePassword(userModel, passwordEncoder.encode(dto.getNewPassword())) ?
+                        MessengerDTO.builder()
+                                .message("Password Update Success")
+                                .status(200)
+                                .build() :
+                        MessengerDTO.builder()
+                                .message("Password Update Fail")
+                                .status(500)
+                                .build()
+                :
+                MessengerDTO.builder()
+                        .message("Incorrect Password")
+                        .status(401)
+                        .build();
     }
 }

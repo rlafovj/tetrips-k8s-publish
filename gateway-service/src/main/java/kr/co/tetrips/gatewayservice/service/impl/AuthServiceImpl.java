@@ -52,9 +52,9 @@ public class AuthServiceImpl implements AuthService{
                                                 .value(accessToken)
                                                 .maxAge(jwtProvider.getAccessExpired()/1000)
                                                 .path("/")
-//                                                .secure(false) // for test
-//                                                .sameSite("None") // for test
-                                                // .httpOnly(true)
+                                                .secure(true) // for test
+                                                .sameSite("None") // for test
+                                                .httpOnly(true)
                                                 .build()
                                     )
                                     .cookie(
@@ -62,9 +62,9 @@ public class AuthServiceImpl implements AuthService{
                                                 .value(refreshToken)
                                                 .maxAge(jwtProvider.getRefreshExpired()/1000)
                                                 .path("/")
-//                                                .secure(false) // for test
-//                                                .sameSite("None") // for test
-                                                // .httpOnly(true)
+                                                .secure(true) // for test
+                                                .sameSite("None") // for test
+                                                .httpOnly(true)
                                                 .build()
                                     )
                                     .cookie(
@@ -72,9 +72,9 @@ public class AuthServiceImpl implements AuthService{
                                                 .value(jwtProvider.extractEmail(accessToken))
                                                 .maxAge(jwtProvider.getRefreshExpired()/1000)
                                                 .path("/")
-//                                                .secure(false) // for test
-//                                                .sameSite("None") // for test
-                                                // .httpOnly(true
+                                                .secure(true) // for test
+                                                .sameSite("None") // for test
+                                                .httpOnly(true)
                                                 .build()
                                     )
 //                                        .cookie(
@@ -118,9 +118,9 @@ public class AuthServiceImpl implements AuthService{
                             .value(accessToken)
                             .maxAge(jwtProvider.getAccessExpiredDate())
                             .path("/")
-//                            .secure(false) // for test
-//                            .sameSite("None") // for test
-                            // .httpOnly(true)
+                            .secure(true) // for test
+                            .sameSite("None") // for test
+                            .httpOnly(true)
                             .build()
                 )
                 .build()

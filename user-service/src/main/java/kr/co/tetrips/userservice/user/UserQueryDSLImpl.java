@@ -58,4 +58,13 @@ public class UserQueryDSLImpl implements UserQueryDSL{
             .fetchFirst())
             .getId();
   }
+
+  @Override
+  public boolean updatePassword(UserModel userModel, String encode) {
+    QUserModel qUser = QUserModel.userModel;
+    return factory.update(qUser)
+            .where(qUser.email.eq(userModel.getEmail()))
+            .set(qUser.password, encode)
+            .execute() >= 1L;
+  }
 }

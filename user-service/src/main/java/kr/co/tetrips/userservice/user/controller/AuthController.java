@@ -1,12 +1,14 @@
 package kr.co.tetrips.userservice.user.controller;
 
 import kr.co.tetrips.userservice.user.domain.dto.LoginResultDTO;
+import kr.co.tetrips.userservice.user.domain.dto.PasswordDTO;
 import kr.co.tetrips.userservice.user.domain.dto.UserDTO;
 import kr.co.tetrips.userservice.user.domain.dto.MessengerDTO;
 import kr.co.tetrips.userservice.user.domain.vo.Role;
 import kr.co.tetrips.userservice.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,5 +45,19 @@ public class AuthController {
     log.info(">>> oauthJoin con 진입: {}", dto);
     return true;
     // return ResponseEntity.ok(service.save(dto));
+  }
+
+  @PostMapping("/updatePassword")
+  public ResponseEntity<MessengerDTO> updatePassword(@RequestBody PasswordDTO dto) {
+    log.info(">>> updatePassword con 진입: {}", dto);
+    MessengerDTO response = userService.updatePassword(dto);
+    HttpStatus status = HttpStatus.OK;
+    if (response.getStatus() == 401) {
+      status = HttpStatus.UNAUTHORIZED;
+    }
+    else if (response.getStatus() == 500) {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
+    return ResponseEntity.status(status).body(response);
   }
 }

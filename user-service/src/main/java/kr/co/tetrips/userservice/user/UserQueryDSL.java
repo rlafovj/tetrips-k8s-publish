@@ -14,4 +14,6 @@ public interface UserQueryDSL {
 
   boolean updateUserInfo(UserModel updateUser);
   Long getUserIdByEmail(String email);
+
+  boolean updatePassword(UserModel userModel, String encode);
 }

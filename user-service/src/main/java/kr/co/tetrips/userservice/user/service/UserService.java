@@ -1,6 +1,7 @@
 package kr.co.tetrips.userservice.user.service;
 
 import kr.co.tetrips.userservice.user.domain.dto.LoginResultDTO;
+import kr.co.tetrips.userservice.user.domain.dto.PasswordDTO;
 import kr.co.tetrips.userservice.user.domain.model.UserModel;
 import kr.co.tetrips.userservice.user.domain.dto.UserDTO;
 import kr.co.tetrips.userservice.user.domain.dto.MessengerDTO;
@@ -42,4 +43,6 @@ public interface UserService {
   UserDTO updateUserInfo(UserDTO dto);
 
   MessengerDTO deleteUser(String email);
+
+  MessengerDTO updatePassword(PasswordDTO dto);
 }

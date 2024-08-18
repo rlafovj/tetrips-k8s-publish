@@ -77,6 +77,17 @@ public class GatewayRouter {
                       return f;
                     })
                     .uri("lb://USER/user/deleteUser"))
+            .route(p -> p
+                    .path("/auth/updatePassword")
+                    .filters(f -> {
+                      AuthorizationHeaderFilter.Config config = new AuthorizationHeaderFilter.Config();
+                        config.setHeaderName("Authorization");
+                        config.setHeaderValue("Bearer");
+                        config.setRole(Arrays.asList(Role.USER, Role.ADMIN));
+                        f.filter(authorizationHeaderFilter.apply(config));
+                        return f;
+                    })
+                    .uri("lb://USER/auth/updatePassword"))
 //            .route(p -> p
 //                    .path("/swagger/**")
 //                    .uri("lb://USER")
