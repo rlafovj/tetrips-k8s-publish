@@ -58,7 +58,7 @@ public class UserQueryDSLImpl implements UserQueryDSL{
             .fetchFirst())
             .getId();
   }
-
+  @Transactional
   @Override
   public boolean updatePassword(UserModel userModel, String encode) {
     QUserModel qUser = QUserModel.userModel;
